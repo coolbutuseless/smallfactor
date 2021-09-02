@@ -35,6 +35,7 @@ usethis::use_badge(
 
 <!-- badges: start -->
 ![](https://img.shields.io/badge/cool-useless-green.svg)
+[![R-CMD-check](https://github.com/coolbutuseless/smallfactor/workflows/R-CMD-check/badge.svg)](https://github.com/coolbutuseless/smallfactor/actions)
 <!-- badges: end -->
 
 `smallfactor` is an experiment to see what trade-offs there might be for storing
