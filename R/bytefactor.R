@@ -1,14 +1,14 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Subset a smallfactor
+#' Subset a bytefactor
 #'
-#' @param x smallfactor
+#' @param x bytefactor
 #' @param ... ignored
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-'[.smallfactor' <- function(x, ...) {
+'[.bytefactor' <- function(x, ...) {
   y <- NextMethod("[[")
   attr(y, "levels") <- attr(x, "levels")
   class(y) <- oldClass(x)
@@ -17,14 +17,16 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Include a smallfactor in a data.frame object
+#' Include a bytefactor in a data.frame object
+#'
+#' Code based on \code{as.data.frame.numeric}
 #'
 #' @param x,row.names,optional,...,nm see documentation for \code{as.data.frame.faactor()}
 #'
 #' @return data.frame
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as.data.frame.smallfactor <- function (x, row.names = NULL, optional = FALSE, ..., nm = deparse1(substitute(x))) {
+as.data.frame.bytefactor <- function (x, row.names = NULL, optional = FALSE, ..., nm = deparse1(substitute(x))) { # nocov start
   force(nm)
   nrows <- length(x)
   if (!(is.null(row.names) || (is.character(row.names) && length(row.names) ==
@@ -45,66 +47,80 @@ as.data.frame.smallfactor <- function (x, row.names = NULL, optional = FALSE, ..
   if (!optional)
     names(value) <- nm
   structure(value, row.names = row.names, class = "data.frame")
-}
+} # nocov end
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Convert an ordinary factor into a smallfactor
+#' Convert an ordinary factor into a bytefactor
 #'
 #' @param x factor object
 #'
-#' @return smallfactor object if number of levels < 256, otherwise error
+#' @return bytefactor object if number of levels < 256, otherwise error
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as.smallfactor <- function(x) {
+as.bytefactor <- function(x) {
   stopifnot(`only factor objects supported for now` = is.factor(x))
   stopifnot(length(levels(x)) < 256)
 
-  smallfactor(x, levels = levels(x))
+  bytefactor(x, levels = levels(x))
 }
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Convert a smallfactor into a regular factor
+#' Convert a bytefactor into a regular factor
 #'
-#' @param x smallfactor object
+#' @param x bytefactor object
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as.factor.smallfactor <- function(x) {
-  factor(as.integer(x), levels = seq.int(length(levels(x))), labels = levels(x))
+as.factor.bytefactor <- function(x) {
+  factor(as.integer(unclass(x)), levels = seq.int(length(levels(x))), labels = levels(x))
+  # factor(as.integer(unclass(x)), levels = levels(x))
 }
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Character representation of a small factor
+#' Other representations of a small factor
 #'
-#' @param x smallfactor object
+#' @param x bytefactor object
 #' @param ... other arguments passed to \code{as.character.factor()}
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as.character.smallfactor <- function(x, ...) {
-  as.character(as.factor.smallfactor(x), ...)
+as.character.bytefactor <- function(x, ...) {
+  as.character(as.factor.bytefactor(x), ...)
 }
 
+#' @rdname as.character.bytefactor
+#' @export
+as.integer.bytefactor <- function(x, ...) {
+  as.integer(as.factor.bytefactor(x), ...)
+}
+
+#' @rdname as.character.bytefactor
+#' @export
+as.double.bytefactor <- function(x, ...) {
+  as.double(as.factor.bytefactor(x), ...)
+}
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Print a smallfactor
+#' Print a bytefactor
 #'
-#' @param x smallfactor object
+#' @param x bytefactor object
 #' @param ... other arguments passed to \code{print.factor()}
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-print.smallfactor <- function(x, ...) {
-  cat("[smallfactor]\n")
-  print(as.factor.smallfactor(x), ...)
+print.bytefactor <- function(x, ...) {
+  cat("[bytefactor]\n")
+  print(as.factor.bytefactor(x), ...)
 }
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Create a smallfactor i.e. a factor backed by a raw byte vector, not an integer
+#' Create a bytefactor i.e. a factor backed by a raw byte vector, not an integer
 #'
 #' @param x object to turn into a factor
 #' @param levels the levels of the factor. Default: NULL means to take the
@@ -112,7 +128,7 @@ print.smallfactor <- function(x, ...) {
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-smallfactor <- function(x, levels = NULL) {
+bytefactor <- function(x, levels = NULL) {
 
   stopifnot(length(unique(x)) < 256)
 
@@ -126,7 +142,7 @@ smallfactor <- function(x, levels = NULL) {
   f <- as.raw(match(x, levels))
   attr(f, 'levels') <- levels
 
-  class(f) <- c('smallfactor')
+  class(f) <- c('bytefactor')
   f
 }
 
