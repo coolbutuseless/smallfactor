@@ -109,7 +109,11 @@ print.bitfactor <- function(x, ...) {
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bitfactor <- function(x, levels = NULL) {
-  stopifnot(length(unique(x)) < 256)
+
+  # 15bits is the maximum sensible number of levels to store in a bit factor.
+  # Any larger than 15 bits, and you can only fit 1 value per integer,
+  # in which case you should just use a normal R factor.
+  stopifnot(length(unique(x)) < 32768) # 2^15
 
   if (is.null(levels)) {
     y      <- unique(x)
