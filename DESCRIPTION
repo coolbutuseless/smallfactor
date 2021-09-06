@@ -1,10 +1,10 @@
 Package: smallfactor
 Type: Package
-Title: A Small Factor in a Raw Vector
+Title: Store Factor-Like Objects in Bytes and Bytes
 Version: 0.1.1
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
-Description: Storing a factor in a raw byte instead of an integer.
+Description: Store a factor-like vector in a byte or bits (instead of an integer).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

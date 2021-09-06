@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 
+set.seed(1)
 library(dplyr)
 library(smallfactor)
 ```

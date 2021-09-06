@@ -110,7 +110,7 @@ tiny
 ```
 
     #> [bitfactor] 10 values @ ~7 bits/value = 3 integer(s)
-    #>  [1] 19  83  56  8   28  14  42  100 71  31 
+    #>  [1] 68 39 1  34 87 43 14 82 59 51
     #> 100 Levels: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 ... 100
 
 ``` r
@@ -118,7 +118,7 @@ tiny[4:6]
 ```
 
     #> [bitfactor] 3 values @ ~7 bits/value = 1 integer(s)
-    #> [1] 8  28 14
+    #> [1] 34 87 43
     #> 100 Levels: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 ... 100
 
 ## Storing some DNA in `bytefactor` and `bitfactor` objects.
